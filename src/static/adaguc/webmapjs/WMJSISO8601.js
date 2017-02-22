@@ -357,3 +357,9 @@ function init(){
   steps=getNumberOfTimeSteps(starttime,stoptime,interval);
 }
 */
+module.exports = {
+  parseISOTimeRangeDuration,
+  getCurrentDateIso8601,
+  parseISO8601DateToDate,
+  DateInterval
+};

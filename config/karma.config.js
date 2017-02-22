@@ -37,7 +37,8 @@ const karmaConfig = {
     // also run tests through sourcemap for easier debugging
     './src/**/*.spec.js': ['webpack'],
     './src/test/*.js': ['webpack'],
-    './src/**/*.js': ['webpack', 'sourcemap', 'coverage']
+    './src/static/**/*.js': ['webpack'],
+    './src/**/*.js': ['webpack', 'sourcemap']
   },
   webpack  : {
     devtool: 'inline-source-map',
@@ -69,7 +70,7 @@ const karmaConfig = {
     noInfo : true
   },
 
-  plugins: Object.assign([], webpackConfig.plugins, [
+  plugins: webpackConfig.plugins.concat([
     'karma-mocha',
     'karma-chai',
     'karma-webpack',
@@ -82,7 +83,8 @@ const karmaConfig = {
 
   coverageReporter : {
     dir: 'coverage',
-    reporters : project.coverage_reporters
+    reporters : project.coverage_reporters,
+    includeAllSources: true
   }
 };
 module.exports = (cfg) => {

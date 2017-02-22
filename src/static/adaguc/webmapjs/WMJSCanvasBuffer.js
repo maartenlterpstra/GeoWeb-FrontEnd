@@ -1,12 +1,12 @@
-
 var WMJSCanvasBuffer = function (webmapJSCallback, _type, _imageStore, w, h) {
   // console.log("WMJSCanvasBuffer created with "+w+","+h);
   var _this = this;
-
+  var error = function(message){ console.log('Error! (WMJSCanvasBuffer):', message)};
   this.canvas =
     $('<canvas/>', { 'class':'WMJSCanvasBuffer' })
     .width(w)
     .height(h);
+ var debug = function (message) {};
 
   var ctx = _this.canvas[0].getContext('2d');
   ctx.canvas.width = w;
@@ -245,3 +245,6 @@ var WMJSCanvasBuffer = function (webmapJSCallback, _type, _imageStore, w, h) {
   };
 };
 
+module.exports = {
+  WMJSCanvasBuffer
+};

@@ -1,3 +1,4 @@
+
 var WMJSDialog = {};
 var WMJSDialogsCreated = 0;
 WMJSDialog.closeAllDialogs = function (gfiDialogList) {
@@ -6,6 +7,9 @@ WMJSDialog.closeAllDialogs = function (gfiDialogList) {
   }
   gfiDialogList = [];
 };
+
+var wmjs = require('./WebMapJS.js');
+var tools = require('./WMJSTools.js');
 
 WMJSDialog.createDialog = function (options, baseDiv, _map) {
   // _map.closeAllGFIDialogs();
@@ -103,7 +107,7 @@ WMJSDialog.createDialog = function (options, baseDiv, _map) {
   dialog.resize();
 
   dialog.setLoading = function () {
-    dialogContent.html('<img style="margin-left:10px;margin-top:10px;" src="' + loadingImageSrc + '"/>');
+    dialogContent.html('<img style="margin-left:10px;margin-top:10px;" src="' + wmjs.loadingImageSrc + '"/>');
   };
 
   dialog.setXY = function (x, y) {
@@ -131,8 +135,11 @@ WMJSDialog.createDialog = function (options, baseDiv, _map) {
       dialogContent.html(data);
     };
 
-    MakeHTTPRequest(options.dataURL, update, update);
+    tools.MakeHTTPRequest(options.dataURL, update, update);
   }
 
   return dialog;
+};
+module.exports = {
+  WMJSDialog
 };

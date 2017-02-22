@@ -4,6 +4,9 @@
  * Author      : MaartenPlieger (plieger at knmi.nl)
  * Copyright KNMI
  */
+module.exports = {
+  WMJSListener
+}
 function WMJSListener () {
   var callBacks = Array();
   var numCallBacks = 0;

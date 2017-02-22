@@ -23,4 +23,3 @@ epsgDescriptionLookup['EPSG:25831'] = 'ETRS89 / UTM zone 31N';
 epsgDescriptionLookup['EPSG:25832'] = 'ETRS89 / UTM zone 32N';
 epsgDescriptionLookup['EPSG:28992'] = 'Dutch Amersfoort / RD New';
 epsgDescriptionLookup['EPSG:32661'] = 'Polar Stereographic WGS 84 / UPS North';
-

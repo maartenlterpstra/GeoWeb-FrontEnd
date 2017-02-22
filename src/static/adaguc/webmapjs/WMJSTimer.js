@@ -3,6 +3,9 @@
   * Author MaartenPlieger (plieger at knmi.nl)
   * Copyright KNMI
   */
+module.exports = {
+  WMJSTimer
+}
 function WMJSTimer () {
   /**
    * Set the length of the timer, in milli seconds, after time has elapsed function is called

@@ -192,7 +192,7 @@ webpackConfig.module.rules.push(
     loader: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'
   },
   {
-    test: /\.(png|jpg)$/,
+    test: /\.(png|jpg|gif)$/,
     loader: 'url-loader?limit=8192'
   }
 );

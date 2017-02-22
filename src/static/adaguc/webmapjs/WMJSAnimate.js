@@ -203,3 +203,6 @@ var WMJSAnimate = function (_map) {
   divAnimationInfo.style.fontSize = '10px';
   _map.getBaseElement().append(divAnimationInfo);
 };
+module.exports = {
+  WMJSAnimate
+}

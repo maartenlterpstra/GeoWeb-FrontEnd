@@ -29,7 +29,136 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+  require('../jquery/jquery-1.8.3.min.js');
+  require('../jquery/jquery-ui.min.js');
+  // require('../proj4js/lib/proj4js');
+  // console.log((Proj4js.transform)());
+  // require('./WMJSProj4Definitions.js');
+(function ($) {
 
+    var toFix = ['wheel', 'mousewheel', 'DOMMouseScroll', 'MozMousePixelScroll'];
+    var toBind = 'onwheel' in document || document.documentMode >= 9 ? ['wheel'] : ['mousewheel', 'DomMouseScroll', 'MozMousePixelScroll'];
+    var lowestDelta, lowestDeltaXY;
+
+    if ( $.event.fixHooks ) {
+        for ( var i = toFix.length; i; ) {
+            $.event.fixHooks[ toFix[--i] ] = $.event.mouseHooks;
+        }
+    }
+
+    $.event.special.mousewheel = {
+        setup: function() {
+            if ( this.addEventListener ) {
+                for ( var i = toBind.length; i; ) {
+                    this.addEventListener( toBind[--i], handler, false );
+                }
+            } else {
+                this.onmousewheel = handler;
+            }
+        },
+
+        teardown: function() {
+            if ( this.removeEventListener ) {
+                for ( var i = toBind.length; i; ) {
+                    this.removeEventListener( toBind[--i], handler, false );
+                }
+            } else {
+                this.onmousewheel = null;
+            }
+        }
+    };
+
+    $.fn.extend({
+        mousewheel: function(fn) {
+            return fn ? this.bind("mousewheel", fn) : this.trigger("mousewheel");
+        },
+
+        unmousewheel: function(fn) {
+            return this.unbind("mousewheel", fn);
+        }
+    });
+
+
+    function handler(event) {
+        var orgEvent = event || window.event,
+            args = [].slice.call(arguments, 1),
+            delta = 0,
+            deltaX = 0,
+            deltaY = 0,
+            absDelta = 0,
+            absDeltaXY = 0,
+            fn;
+        event = $.event.fix(orgEvent);
+        event.type = "mousewheel";
+
+        // Old school scrollwheel delta
+        if ( orgEvent.wheelDelta ) { delta = orgEvent.wheelDelta; }
+        if ( orgEvent.detail )     { delta = orgEvent.detail * -1; }
+
+        // New school wheel delta (wheel event)
+        if ( orgEvent.deltaY ) {
+            deltaY = orgEvent.deltaY * -1;
+            delta  = deltaY;
+        }
+        if ( orgEvent.deltaX ) {
+            deltaX = orgEvent.deltaX;
+            delta  = deltaX * -1;
+        }
+
+        // Webkit
+        if ( orgEvent.wheelDeltaY !== undefined ) { deltaY = orgEvent.wheelDeltaY; }
+        if ( orgEvent.wheelDeltaX !== undefined ) { deltaX = orgEvent.wheelDeltaX * -1; }
+
+        // Look for lowest delta to normalize the delta values
+        absDelta = Math.abs(delta);
+        if ( !lowestDelta || absDelta < lowestDelta ) { lowestDelta = absDelta; }
+        absDeltaXY = Math.max(Math.abs(deltaY), Math.abs(deltaX));
+        if ( !lowestDeltaXY || absDeltaXY < lowestDeltaXY ) { lowestDeltaXY = absDeltaXY; }
+
+        // Get a whole value for the deltas
+        fn = delta > 0 ? 'floor' : 'ceil';
+        delta  = Math[fn](delta / lowestDelta);
+        deltaX = Math[fn](deltaX / lowestDeltaXY);
+        deltaY = Math[fn](deltaY / lowestDeltaXY);
+
+        // Add event and delta to the front of the arguments
+        args.unshift(event, delta, deltaX, deltaY);
+
+        return ($.event.dispatch || $.event.handle).apply(this, args);
+    }
+
+})($);
+  require('./WMJSJqueryprototypes.js');
+  var proj = require('../proj4js/lib/proj4js');
+  Proj4js = proj.Proj4js;
+  require('./WMJSProj4Definitions.js');
+  // console.log(Proj4js);
+  var tools = require('./WMJSTools');
+  var bbox = require('./WMJSBBOX');
+  var is = require('./WMJSImageStore');
+  var ls = require('./WMJSListener');
+  var timer = require('./WMJSTimer');
+  var cb = require('./WMJSCanvasBuffer');
+  var db = require('./WMJSDivBuffer');
+  var img = require('./WMJSImage');
+  var anim = require('./WMJSAnimate');
+  var i18n = require('../I18n/lang.nl.js');
+  var diag = require('./WMJSDialog');
+
+  WMJSDialog = diag.WMJSDialog;
+  WMJSImageStore = is.WMJSImageStore;
+  WMJSListener = ls.WMJSListener;
+  WMJSTimer = timer.WMJSTimer;
+  WMJSBBOX = bbox.WMJSBBOX;
+  WMJSCanvasBuffer = cb.WMJSCanvasBuffer;
+  WMJSDivBuffer = db.WMJSDivBuffer;
+  WMJSImage = img.WMJSImage;
+  WMJSAnimate = anim.WMJSAnimate;
+  isDefined = tools.isDefined;
+  attach_event = tools.attach_event;
+  del_event = tools.del_event;
+  preventdefault_event = tools.preventdefault_event;
+  I18n = i18n.I18n;
   var WebMapJSMapNo = 0;
 
   var logging = false;
@@ -48,7 +177,7 @@
    */
 
   var debug = function (message) {};
-  var error = function (message) {};
+  var error = function (message) {console.log('Error! (WebMapJS): ', message)};
 
   /**
     * Function which checks wether URL contains a ? token. If not, it is assumed that this token was not provided by the user,
@@ -2322,7 +2451,7 @@
             FeatureInfoRequestReady('Layer is not queryable.', myLayer);
           } else {
             try {
-              MakeHTTPRequest(myLayer.getFeatureInfoUrl, FeatureInfoRequestReady,
+              tools.MakeHTTPRequest(myLayer.getFeatureInfoUrl, FeatureInfoRequestReady,
               function (data, myLayer) { FeatureInfoRequestReady(data, myLayer); error(data); }, myLayer);
             } catch (e) {
               FeatureInfoRequestReady('Exception: ' + e, myLayer);
@@ -3643,3 +3772,9 @@
     // _map.setDisplayModeGFI();
   };
 
+  module.exports = {
+    WMJSMap,
+    WMJScheckURL,
+    WMJSProjection,
+    loadingImageSrc
+  };

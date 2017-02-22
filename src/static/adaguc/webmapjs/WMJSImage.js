@@ -167,3 +167,6 @@ var WMJSImage = function (src, callback, __type) {
 
   return _this;
 };
+module.exports = {
+  WMJSImage
+};

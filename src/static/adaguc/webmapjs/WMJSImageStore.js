@@ -1,4 +1,3 @@
-
 var WMJSImageStore = function (maxNumberOfImages, _loadEventCallback, _type) {
   // console.log("Creating new Imagestore");
   this.images = [];
@@ -94,4 +93,7 @@ var WMJSImageStore = function (maxNumberOfImages, _loadEventCallback, _type) {
       return image;
     }
   };
+};
+module.exports = {
+  WMJSImageStore
 };

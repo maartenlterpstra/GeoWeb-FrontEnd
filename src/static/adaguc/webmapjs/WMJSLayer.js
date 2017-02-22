@@ -3,6 +3,21 @@
   * Author : MaartenPlieger (plieger at knmi.nl)
   * Copyright KNMI
   */
+ module.exports = {
+   WMJSLayer
+ };
+ var debug = function (message) {};
+  var error = function (message) {console.log('Error (WMJSLayer)!: ', message)};
+ var wmjs = require('./WebMapJS.js');
+ var srv = require('./WMJSService.js');
+ var tools = require('./WMJSTools.js');
+ var dim = require('./WMJSDimension.js');
+ WMJSDimension = dim.WMJSDimension;
+ isNull = tools.isNull;
+ WMJScheckURL = wmjs.WMJScheckURL;
+ WMJSProjection = wmjs.WMJSProjection;
+ WMSVersion = srv.WMSVersion;
+ WMJSgetServiceFromStore = srv.WMJSgetServiceFromStore;
 WMJSEmptyLayerName = 'empty_layer';
 WMJSEmptyLayerTitle = 'empty layer';
 function WMJSLayer (options) {

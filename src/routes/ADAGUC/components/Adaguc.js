@@ -3,9 +3,16 @@ import { default as Menu } from './Menu';
 import TimeComponent from './TimeComponent.js';
 import MetaInfo from './MetaInfo.js';
 import axios from 'axios';
+import $ from 'jquery';
+var WMJS = require('static/adaguc/webmapjs/WebMapJS.js');
+var WMJSL = require('static/adaguc/webmapjs/WMJSLayer.js');
+require('../../../static/adaguc/webmapjs/WMJSStyles.css');
+require('../../../static/adaguc/webmapjs/WMJSTimeSelector.css');
+
 export default class Adaguc extends React.Component {
   constructor () {
     super();
+
     this.initAdaguc = this.initAdaguc.bind(this);
     this.animateLayer = this.animateLayer.bind(this);
     this.resize = this.resize.bind(this);
@@ -72,7 +79,7 @@ export default class Adaguc extends React.Component {
     const url = 'http://birdexp07.knmi.nl/geoweb/adagucviewer/webmapjs';
 
     // eslint-disable-next-line no-undef
-    this.webMapJS = new WMJSMap(adagucMapRef);
+    this.webMapJS = new WMJS.WMJSMap(adagucMapRef);
     this.webMapJS.setBaseURL(url);
     // eslint-disable-next-line no-undef
     $(window).resize(this.resize);
@@ -83,7 +90,7 @@ export default class Adaguc extends React.Component {
     this.webMapJS.setProjection(adagucProperties.projectionName);
     this.webMapJS.setBBOX(adagucProperties.boundingBox.bbox.join());
     // eslint-disable-next-line no-undef
-    this.webMapJS.setBaseLayers([new WMJSLayer(adagucProperties.mapType)]);
+    this.webMapJS.setBaseLayers([new WMJSL.WMJSLayer(adagucProperties.mapType)]);
     axios.get('http://birdexp07.knmi.nl/cgi-bin/geoweb/getServices.cgi').then(src => {
       const sources = src.data;
       axios.get('http://birdexp07.knmi.nl/cgi-bin/geoweb/getOverlayServices.cgi').then(res => {
@@ -132,10 +139,10 @@ export default class Adaguc extends React.Component {
     const { setLayers, setStyles } = actions;
     const { source, layer, style, mapType, boundingBox, overlay } = adagucProperties;
       // eslint-disable-next-line no-undef
-    const baselayer = new WMJSLayer(mapType);
+    const baselayer = new WMJSL.WMJSLayer(mapType);
     if (overlay) {
       // eslint-disable-next-line no-undef
-      const overLayer = new WMJSLayer(overlay);
+      const overLayer = new WMJSL.WMJSLayer(overlay);
       overLayer.keepOnTop = true;
       const newBaselayers = [baselayer, overLayer];
       this.webMapJS.setBaseLayers(newBaselayers);
@@ -149,7 +156,6 @@ export default class Adaguc extends React.Component {
     if (mapType !== prevProps.adagucProperties.mapType) {
       // eslint-disable-next-line no-undef
     } else if (boundingBox !== prevProps.adagucProperties.boundingBox) {
-      console.log(boundingBox.bbox.join());
       this.webMapJS.setBBOX(boundingBox.bbox.join());
       this.webMapJS.draw();
     } else {
@@ -166,7 +172,7 @@ export default class Adaguc extends React.Component {
       }
       const combined = Object.assign({}, source, { name: layer }, { style: style }, { opacity: 0.75 });
       // eslint-disable-next-line no-undef
-      var newDataLayer = new WMJSLayer(combined);
+      var newDataLayer = new WMJSL.WMJSLayer(combined);
       // Stop the old animation
       this.webMapJS.stopAnimating();
       // Start the animation of th new layer
@@ -178,7 +184,7 @@ export default class Adaguc extends React.Component {
         this.webMapJS.addLayer(newDataLayer);
       }
       // eslint-disable-next-line
-      var newDataLayer2 = new WMJSLayer({
+      var newDataLayer2 = new WMJSL.WMJSLayer({
         service:'http://birdexp07.knmi.nl/cgi-bin/geoweb/adaguc.RADAR.cgi?',
         name:'precipitation'
       });

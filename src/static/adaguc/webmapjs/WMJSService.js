@@ -9,7 +9,13 @@ var WMSVersion = {
   version111: '1.1.1',
   version130: '1.3.0'
 };
+  var debug = function (message) {};
+  var error = function (message) {console.log('Error! (WMJSService): ', message)};
 
+ var tools = require('./WMJSTools.js');
+ URLEncode = tools.URLEncode;
+ toArray = tools.toArray;
+ WMJSKVP = tools.WMJSKVP;
 /**
   * Global getcapabilities function
   */
@@ -413,4 +419,8 @@ function WMJSService (options) {
     };
     this.getNodes(callback, failure);
   };
+};
+module.exports = {
+  WMSVersion,
+  WMJSgetServiceFromStore
 };

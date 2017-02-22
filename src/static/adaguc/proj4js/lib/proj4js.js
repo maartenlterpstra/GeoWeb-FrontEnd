@@ -9,21 +9,21 @@ $Id: Proj.js 2956 2007-07-09 12:17:52Z steven $
 /**
  * Namespace: Proj4js
  *
- * Proj4js is a JavaScript library to transform point coordinates from one 
+ * Proj4js is a JavaScript library to transform point coordinates from one
  * coordinate system to another, including datum transformations.
  *
- * This library is a port of both the Proj.4 and GCTCP C libraries to JavaScript. 
- * Enabling these transformations in the browser allows geographic data stored 
- * in different projections to be combined in browser-based web mapping 
+ * This library is a port of both the Proj.4 and GCTCP C libraries to JavaScript.
+ * Enabling these transformations in the browser allows geographic data stored
+ * in different projections to be combined in browser-based web mapping
  * applications.
- * 
+ *
  * Proj4js must have access to coordinate system initialization strings (which
- * are the same as for PROJ.4 command line).  Thes can be included in your 
- * application using a <script> tag or Proj4js can load CS initialization 
+ * are the same as for PROJ.4 command line).  Thes can be included in your
+ * application using a <script> tag or Proj4js can load CS initialization
  * strings from a local directory or a web service such as spatialreference.org.
  *
  * Similarly, Proj4js must have access to projection transform code.  These can
- * be included individually using a <script> tag in your page, built into a 
+ * be included individually using a <script> tag in your page, built into a
  * custom build of Proj4js or loaded dynamically at run-time.  Using the
  * -combined and -compressed versions of Proj4js includes all projection class
  * code by default.
@@ -31,9 +31,9 @@ $Id: Proj.js 2956 2007-07-09 12:17:52Z steven $
  * Note that dynamic loading of defs and code happens ascynchrously, check the
  * Proj.readyToUse flag before using the Proj object.  If the defs and code
  * required by your application are loaded through script tags, dynamic loading
- * is not required and the Proj object will be readyToUse on return from the 
+ * is not required and the Proj object will be readyToUse on return from the
  * constructor.
- * 
+ *
  * All coordinates are handled as points which have a .x and a .y property
  * which will be modified in place.
  *
@@ -46,14 +46,13 @@ $Id: Proj.js 2956 2007-07-09 12:17:52Z steven $
  * Global namespace object for Proj4js library
  */
 var Proj4js = {
-
     /**
      * Property: defaultDatum
      * The datum to use when no others a specified
      */
     defaultDatum: 'WGS84',                  //default datum
 
-    /** 
+    /**
     * Method: transform(source, dest, point)
     * Transform a point coordinate from one map projection to another.  This is
     * really the only public method you should need to use.
@@ -73,7 +72,7 @@ var Proj4js = {
             this.reportError("Proj4js initialization for:"+dest.srsCode+" not yet complete");
             return point;
         }
-        
+
         // Workaround for datum shifts towgs84, if either source or destination projection is not wgs84
         if (source.datum && dest.datum && (
             ((source.datum.datum_type == Proj4js.common.PJD_3PARAM || source.datum.datum_type == Proj4js.common.PJD_7PARAM) && dest.datumCode != "WGS84") ||
@@ -101,8 +100,8 @@ var Proj4js = {
         }
 
         // Adjust for the prime meridian if necessary
-        if (source.from_greenwich) { 
-            point.x += source.from_greenwich; 
+        if (source.from_greenwich) {
+            point.x += source.from_greenwich;
         }
 
         // Convert datums if needed, and if possible.
@@ -113,7 +112,7 @@ var Proj4js = {
             point.x -= dest.from_greenwich;
         }
 
-        if( dest.projName=="longlat" ) {             
+        if( dest.projName=="longlat" ) {
             // convert radians to decimal degrees
             point.x *= Proj4js.common.R2D;
             point.y *= Proj4js.common.R2D;
@@ -230,7 +229,7 @@ var Proj4js = {
 
     /**
      * Function: reportError
-     * An internal method to report errors back to user. 
+     * An internal method to report errors back to user.
      * Override this in applications to report error messages or throw exceptions.
      */
     reportError: function(msg) {
@@ -242,11 +241,11 @@ var Proj4js = {
  * Title: Private Methods
  * The following properties and methods are intended for internal use only.
  *
- * This is a minimal implementation of JavaScript inheritance methods so that 
+ * This is a minimal implementation of JavaScript inheritance methods so that
  * Proj4js can be used as a stand-alone library.
  * These are copies of the equivalent OpenLayers methods at v2.7
  */
- 
+
 /**
  * Function: extend
  * Copy all properties of a source object to a destination object.  Modifies
@@ -275,15 +274,15 @@ var Proj4js = {
 
 /**
  * Constructor: Class
- * Base class used to construct all other classes. Includes support for 
- *     multiple inheritance. 
- *  
+ * Base class used to construct all other classes. Includes support for
+ *     multiple inheritance.
+ *
  */
     Class: function() {
       var Class = function() {
           this.initialize.apply(this, arguments);
       };
-  
+
       var extended = {};
       var parent;
       for(var i=0; i<arguments.length; ++i) {
@@ -297,7 +296,7 @@ var Proj4js = {
           Proj4js.extend(extended, parent);
       }
       Class.prototype = extended;
-      
+
       return Class;
     },
 
@@ -305,11 +304,11 @@ var Proj4js = {
      * Function: bind
      * Bind a function to an object.  Method to easily create closures with
      *     'this' altered.
-     * 
+     *
      * Parameters:
      * func - {Function} Input function.
      * object - {Object} The object to bind to the input function (as this).
-     * 
+     *
      * Returns:
      * {Function} A closure with 'this' set to the passed in object.
      */
@@ -325,11 +324,11 @@ var Proj4js = {
             return func.apply(object, newArgs);
         };
     },
-    
+
 /**
  * The following properties and methods handle dynamic loading of JSON objects.
  */
- 
+
     /**
      * Property: scriptName
      * {String} The filename of this script without any path.
@@ -361,6 +360,7 @@ var Proj4js = {
         var scriptNameLen = scriptName.length;
 
         var scripts = document.getElementsByTagName('script');
+
         for (var i = 0; i < scripts.length; i++) {
             var src = scripts[i].getAttribute('src');
             if (src) {
@@ -372,18 +372,18 @@ var Proj4js = {
                 }
             }
         }
-        return this.libPath||"";
+        return this.libPath||'./adaguc/proj4js/lib/';
     },
 
     /**
      * Function: loadScript
      * Load a JS file from a URL into a <script> tag in the page.
-     * 
+     *
      * Parameters:
      * url - {String} The URL containing the script to load
      * onload - {Function} A method to be executed when the script loads successfully
      * onfail - {Function} A method to be executed when there is an error loading the script
-     * loadCheck - {Function} A boolean method that checks to see if the script 
+     * loadCheck - {Function} A boolean method that checks to see if the script
      *            has loaded.  Typically this just checks for the existance of
      *            an object in the file just loaded.
      */
@@ -401,12 +401,12 @@ var Proj4js = {
       }
       document.getElementsByTagName('head')[0].appendChild(script);
     },
-    
+
     /**
      * Function: checkReadyState
-     * IE workaround since there is no onerror handler.  Calls the user defined 
+     * IE workaround since there is no onerror handler.  Calls the user defined
      * loadCheck method to determine if the script is loaded.
-     * 
+     *
      */
     checkReadyState: function() {
       if (this.readyState == 'loaded') {
@@ -419,16 +419,19 @@ var Proj4js = {
     }
 };
 
+module.exports = {
+  Proj4js
+};
 /**
  * Class: Proj4js.Proj
  *
  * Proj objects provide transformation methods for point coordinates
- * between geodetic latitude/longitude and a projected coordinate system. 
+ * between geodetic latitude/longitude and a projected coordinate system.
  * once they have been initialized with a projection code.
  *
  * Initialization of Proj objects is with a projection code, usually EPSG codes,
  * which is the key that will be used with the Proj4js.defs array.
- * 
+ *
  * The code passed in will be stripped of colons and converted to uppercase
  * to locate projection definition files.
  *
@@ -440,18 +443,18 @@ Proj4js.Proj = Proj4js.Class({
    * Property: readyToUse
    * Flag to indicate if initialization is complete for this Proj object
    */
-  readyToUse: false,   
-  
+  readyToUse: false,
+
   /**
    * Property: title
    * The title to describe the projection
    */
-  title: null,  
-  
+  title: null,
+
   /**
    * Property: projName
    * The projection class for this projection, e.g. lcc (lambert conformal conic,
-   * or merc for mercator).  These are exactly equivalent to their Proj4 
+   * or merc for mercator).  These are exactly equivalent to their Proj4
    * counterparts.
    */
   projName: null,
@@ -498,13 +501,13 @@ Proj4js.Proj = Proj4js.Class({
   */
   initialize: function(srsCode, callback) {
       this.srsCodeInput = srsCode;
-      
+
       //Register callbacks prior to attempting to process definition
       this.queue = [];
       if( callback ){
            this.queue.push( callback );
       }
-      
+
       //check to see if this is a WKT string
       if ((srsCode.indexOf('GEOGCS') >= 0) ||
           (srsCode.indexOf('GEOCCS') >= 0) ||
@@ -515,7 +518,7 @@ Proj4js.Proj = Proj4js.Class({
             this.loadProjCode(this.projName);
             return;
       }
-      
+
       // DGR 2008-08-03 : support urn and url
       if (srsCode.indexOf('urn:') == 0) {
           //urn:ORIGINATOR:def:crs:CODESPACE:VERSION:ID
@@ -556,14 +559,14 @@ Proj4js.Proj = Proj4js.Class({
           this.srsAuth = '';
           this.srsProjNumber = this.srsCode;
       }
-      
+
       this.loadProjDefinition();
   },
-  
+
 /**
  * Function: loadProjDefinition
  *    Loads the coordinate system initialization string if required.
- *    Note that dynamic loading happens asynchronously so an application must 
+ *    Note that dynamic loading happens asynchronously so an application must
  *    wait for the readyToUse property is set to true.
  *    To prevent dynamic loading, include the defs through a script tag in
  *    your application.
@@ -578,7 +581,7 @@ Proj4js.Proj = Proj4js.Class({
 
       //else check for def on the server
       var url = Proj4js.getScriptLocation() + 'defs/' + this.srsAuth.toUpperCase() + this.srsProjNumber + '.js';
-      Proj4js.loadScript(url, 
+      Proj4js.loadScript(url,
                 Proj4js.bind(this.defsLoaded, this),
                 Proj4js.bind(this.loadFromService, this),
                 Proj4js.bind(this.checkDefsLoaded, this) );
@@ -586,14 +589,14 @@ Proj4js.Proj = Proj4js.Class({
 
 /**
  * Function: loadFromService
- *    Creates the REST URL for loading the definition from a web service and 
+ *    Creates the REST URL for loading the definition from a web service and
  *    loads it.
  *
  */
     loadFromService: function() {
       //else load from web service
       var url = Proj4js.defsLookupService +'/' + this.srsAuth +'/'+ this.srsProjNumber + '/proj4js/';
-      Proj4js.loadScript(url, 
+      Proj4js.loadScript(url,
             Proj4js.bind(this.defsLoaded, this),
             Proj4js.bind(this.defsFailed, this),
             Proj4js.bind(this.checkDefsLoaded, this) );
@@ -608,7 +611,7 @@ Proj4js.Proj = Proj4js.Class({
       this.parseDefs();
       this.loadProjCode(this.projName);
     },
-    
+
 /**
  * Function: checkDefsLoaded
  *    This is the loadCheck method to see if the def object exists
@@ -647,10 +650,12 @@ Proj4js.Proj = Proj4js.Class({
       }
 
       //the URL for the projection code
+      console.log(Proj4js.getScriptLocation());
       var url = Proj4js.getScriptLocation() + 'projCode/' + projName + '.js';
-      Proj4js.loadScript(url, 
+      console.log(url);
+      Proj4js.loadScript(url,
               Proj4js.bind(this.loadProjCodeSuccess, this, projName),
-              Proj4js.bind(this.loadProjCodeFailure, this, projName), 
+              Proj4js.bind(this.loadProjCodeFailure, this, projName),
               Proj4js.bind(this.checkCodeLoaded, this, projName) );
     },
 
@@ -677,7 +682,7 @@ Proj4js.Proj = Proj4js.Class({
       Proj4js.reportError("failed to find projection file for: " + projName);
       //TBD initialize with identity transforms so proj will still work?
     },
-    
+
 /**
  * Function: checkCodeLoaded
  *    This is the loadCheck method to see if the projection code is loaded
@@ -728,7 +733,7 @@ Proj4js.Proj = Proj4js.Class({
     }
     wktName = wktName.replace(/^\"/,"");
     wktName = wktName.replace(/\"$/,"");
-    
+
     /*
     wktContent = wktTemp.join(",");
     var wktArray = wktContent.split("],");
@@ -736,7 +741,7 @@ Proj4js.Proj = Proj4js.Class({
       wktArray[i] += "]";
     }
     */
-    
+
     var wktArray = new Array();
     var bkCount = 0;
     var obj = "";
@@ -754,7 +759,7 @@ Proj4js.Proj = Proj4js.Class({
         obj += ",";
       }
     }
-    
+
     //do something based on the type of the wktObject being parsed
     //add in variations in the spelling as required
     switch (wktObject) {
@@ -907,7 +912,7 @@ Proj4js.Proj = Proj4js.Class({
               case "pm":     paramVal = paramVal.replace(/\s/gi,"");
                              this.from_greenwich = Proj4js.PrimeMeridian[paramVal] ?
                                 Proj4js.PrimeMeridian[paramVal] : parseFloat(paramVal);
-                             this.from_greenwich *= Proj4js.common.D2R; 
+                             this.from_greenwich *= Proj4js.common.D2R;
                              break;
               // DGR 2010-11-12: axis
               case "axis":   paramVal = paramVal.replace(/\s/gi,"");
@@ -919,7 +924,7 @@ Proj4js.Proj = Proj4js.Class({
                                 this.axis= paramVal;
                              } //FIXME: be silent ?
                              break
-              case "no_defs": break; 
+              case "no_defs": break;
               default: //alert("Unrecognized parameter: " + paramName);
           } // switch()
       } // for paramArray
@@ -986,7 +991,7 @@ Proj4js.Proj.longlat = {
 Proj4js.Proj.identity = Proj4js.Proj.longlat;
 
 /**
-  Proj4js.defs is a collection of coordinate system definition objects in the 
+  Proj4js.defs is a collection of coordinate system definition objects in the
   PROJ.4 command line format.
   Generally a def is added by means of a separate .js file for example:
 
@@ -1078,8 +1083,8 @@ Proj4js.common = {
     return (-9999);
   },
 
-/* Function to compute constant small q which is the radius of a 
-   parallel of latitude, phi, divided by the semimajor axis. 
+/* Function to compute constant small q which is the radius of a
+   parallel of latitude, phi, divided by the semimajor axis.
 ------------------------------------------------------------*/
   qsfnz : function(eccent,sinphi) {
     var con;
@@ -1201,7 +1206,7 @@ Proj4js.common = {
     var temp= e*sinphi;
     return a/Math.sqrt(1.0 - temp*temp);
   },
-  
+
   //code from the PROJ.4 pj_mlfn.c file;  this may be useful for other projections
   pj_enfn: function(es) {
     var en = new Array();
@@ -1214,13 +1219,13 @@ Proj4js.common = {
     en[4] = t * es * this.C88;
     return en;
   },
-  
+
   pj_mlfn: function(phi, sphi, cphi, en) {
     cphi *= sphi;
     sphi *= sphi;
     return(en[0] * phi - cphi * (en[1] + sphi*(en[2]+ sphi*(en[3] + sphi*en[4]))));
   },
-  
+
   pj_inv_mlfn: function(arg, es, en) {
     var k = 1./(1.-es);
     var phi = arg;
@@ -1254,7 +1259,7 @@ Proj4js.common = {
   C48: .00712076822916666666,
   C66: .36458333333333333333,
   C68: .00569661458333333333,
-  C88: .3076171875  
+  C88: .3076171875
 
 };
 
@@ -1703,19 +1708,19 @@ Proj4js.Point = Proj4js.Class({
      * Return a readable string version of the point
      *
      * Return:
-     * {String} String representation of Proj4js.Point object. 
+     * {String} String representation of Proj4js.Point object.
      *           (ex. <i>"x=5,y=42"</i>)
      */
     toString : function() {
         return ("x=" + this.x + ",y=" + this.y);
     },
 
-    /** 
+    /**
      * APIMethod: toShortString
      * Return a short string version of the point.
      *
      * Return:
-     * {String} Shortened String representation of Proj4js.Point object. 
+     * {String} Shortened String representation of Proj4js.Point object.
      *         (ex. <i>"5, 42"</i>)
      */
     toShortString : function() {

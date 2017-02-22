@@ -4,6 +4,9 @@
   * Author : MaartenPlieger (plieger at knmi.nl)
    * Copyright KNMI
   */
+var iso = require('./WMJSISO8601.js');
+parseISOTimeRangeDuration = iso.parseISOTimeRangeDuration;
+parseISO8601DateToDate = iso.parseISO8601DateToDate;
 WMJSDateOutSideRange = 'outside range';
 WMJSDateTooEarlyString = 'date too early';
 WMJSDateTooLateString = 'date too late';
@@ -263,4 +266,7 @@ function WMJSDimension (config) {
     return dim;
   };
   initialize(this);
+};
+module.exports = {
+  WMJSDimension
 };

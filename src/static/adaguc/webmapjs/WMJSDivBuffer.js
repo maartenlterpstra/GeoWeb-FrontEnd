@@ -1,4 +1,5 @@
-
+var debug = function(message){};
+  var error = function (message) {console.log('Error! (WMJSDivBuffer): ', message)};
 var WMJSDivBuffer = function (webmapJSCallback, _type, _imageStore, w, h) {
   // console.log("WMJSDivBuffer created");
   var _this = this;
@@ -179,3 +180,6 @@ var WMJSDivBuffer = function (webmapJSCallback, _type, _imageStore, w, h) {
   };
 };
 
+module.exports = {
+  WMJSDivBuffer
+};

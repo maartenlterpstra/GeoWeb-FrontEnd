@@ -24,7 +24,6 @@ const project = require('./project.config');
 // for use with karma-webpack-with-fast-source-maps
 const __karmaWebpackManifest__ = []; // eslint-disable-line
 const inManifest = (path) => ~__karmaWebpackManifest__.indexOf(path);
-
 // require all `tests/**/*.spec.js`
 const testsContext = require.context('../', true, /\.(test|spec)\.js$/);
 

@@ -787,3 +787,15 @@ var decodeBase64 = function (s) {
   }
   return r;
 };
+
+module.exports = {
+  isDefined,
+  attach_event,
+  del_event,
+  preventdefault_event,
+  URLEncode,
+  toArray,
+  WMJSKVP,
+  isNull,
+  MakeHTTPRequest
+};

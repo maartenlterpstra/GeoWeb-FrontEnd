@@ -7,6 +7,9 @@
   * Author : MaartenPlieger (plieger at knmi.nl)
   * Copyright KNMI
   */
+ module.exports = {
+   WMJSBBOX
+ };
   function WMJSBBOX (left, bottom, right, top) {
     this.left = -180;  // 0
     this.bottom = -90; // 1`

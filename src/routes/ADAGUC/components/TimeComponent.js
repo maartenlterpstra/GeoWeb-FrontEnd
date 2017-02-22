@@ -4,7 +4,7 @@ import ButtonPausePlayAnimation from './ButtonPausePlayAnimation.js';
 import CanvasComponent from './CanvasComponent.js';
 import { Icon } from 'react-fa';
 import { Button } from 'reactstrap';
-
+var iso = require('../../../static/adaguc/webmapjs/WMJSISO8601.js');
 const TimeComponent = React.createClass({
   propTypes: {
     onChangeAnimation: React.PropTypes.func,
@@ -67,11 +67,11 @@ const TimeComponent = React.createClass({
     ctx.lineWidth = 1;
     let scaleWidth = canvasWidth;
     // eslint-disable-next-line no-undef
-    let currentDate = getCurrentDateIso8601();
+    let currentDate = iso.getCurrentDateIso8601();
     // eslint-disable-next-line no-undef
-    this.startDate = parseISO8601DateToDate(timeDim.currentValue); // getCurrentDateIso8601();
+    this.startDate = iso.parseISO8601DateToDate(timeDim.currentValue); // getCurrentDateIso8601();
     // eslint-disable-next-line no-undef
-    this.endDate = parseISO8601DateToDate(timeDim.currentValue); // getCurrentDateIso8601();
+    this.endDate = iso.parseISO8601DateToDate(timeDim.currentValue); // getCurrentDateIso8601();
 
     this.timeWidth = 24 / 2;
     let hours = this.startDate.getUTCHours();
@@ -87,9 +87,9 @@ const TimeComponent = React.createClass({
     // startDate.substract(new DateInterval(0, 0, 0, 12, 0, 0));
 
     // eslint-disable-next-line no-undef
-    this.startDate.add(new DateInterval(0, 0, 0, 0, 0, 0));
+    this.startDate.add(new iso.DateInterval(0, 0, 0, 0, 0, 0));
     // eslint-disable-next-line no-undef
-    this.endDate.add(new DateInterval(0, 0, 0, this.timeWidth, 0, 0));
+    this.endDate.add(new iso.DateInterval(0, 0, 0, this.timeWidth, 0, 0));
     // console.log(startDate.toISO8601());
     let canvasDateIntervalStr = this.startDate.toISO8601() + '/' + this.endDate.toISO8601() + '/PT1M';
     // console.log(canvasDateIntervalStr);
@@ -237,7 +237,7 @@ const TimeComponent = React.createClass({
     // console.log('update');
     let isodate = this.toISO8601(value);
     // eslint-disable-next-line no-undef
-    var date = parseISO8601DateToDate(isodate);
+    var date = iso.parseISO8601DateToDate(isodate);
     this.props.webmapjs.setDimension('time', date.toISO8601(), false);
     this.props.webmapjs.draw();
     this.eventOnDimChange();
@@ -299,7 +299,7 @@ const TimeComponent = React.createClass({
   },
   handleButtonClickNow () {
     // eslint-disable-next-line no-undef
-    let currentDate = getCurrentDateIso8601();
+    let currentDate = iso.getCurrentDateIso8601();
     this.props.webmapjs.setDimension('time', currentDate.toISO8601(), false);
     this.props.webmapjs.draw();
     this.eventOnDimChange();
