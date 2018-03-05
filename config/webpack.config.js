@@ -12,6 +12,7 @@ const webpackConfig = {
   name: 'client',
   target: 'web',
   devtool: project.compiler_devtool,
+  mode: __PROD__ ? 'production' : 'development',
   resolve: {
     modules: [
       project.paths.client(),
@@ -54,6 +55,10 @@ webpackConfig.externals['react/addons'] = true;
 webpackConfig.externals['config'] = JSON.stringify(require('./config.json'));
 webpackConfig.externals['basemaps'] = JSON.stringify(require('./basemaps.json'));
 
+webpackConfig.optimization = {};
+webpackConfig.optimization.splitChunks = {
+  chunks: 'all'
+};
 // ------------------------------------
 // Plugins
 // ------------------------------------
@@ -61,10 +66,11 @@ webpackConfig.plugins = [
   new webpack.DefinePlugin(project.globals),
   new HtmlWebpackPlugin({
     template: project.paths.client('index.html'),
-    hash: false,
+    hash: true,
     favicon: project.paths.client('components/assets/icon.ico'),
     filename: 'index.html',
     inject: 'body',
+    cache: false,
     minify: {
       collapseWhitespace: true
     }
@@ -72,9 +78,6 @@ webpackConfig.plugins = [
   new CopyWebpackPlugin([
     { from: 'src/static' }
   ]),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'commons'
-  }),
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 ];
 
@@ -104,8 +107,7 @@ if (__DEV__) {
       },
       sourceMap: false,
       warnings: false
-    }),
-    new webpack.optimize.AggressiveMergingPlugin()
+    })
   );
 }
 
@@ -121,11 +123,6 @@ webpackConfig.module.rules = [
     exclude: /(node_modules)/,
     loader: 'babel-loader',
     options: project.compiler_babel,
-    enforce: 'pre'
-  },
-  {
-    test: /\.json$/,
-    loader: 'json-loader',
     enforce: 'pre'
   }
 ];
